@@ -64,6 +64,10 @@ def parse_arguments() -> argparse.Namespace:
                         choices=("x86_64", "amd64", "arm64",))
     parser.add_argument("--prune-destructive", action="store_true",
                         help="Destructive! Detect and remove stale files from older checkouts")
+
+    # Deprecated options, kept for compatibility with old configurations.
+    parser.add_argument("--use-tests", action="store_true", help=argparse.SUPPRESS)
+
     return parser.parse_args()
 
 
@@ -571,6 +575,7 @@ def submodules_lib_update(args: argparse.Namespace, branch: "str | None") -> str
 
 def main() -> int:
     args = parse_arguments()
+
     blender_skip_msg = ""
     libraries_skip_msg = ""
     submodules_skip_msg = ""
@@ -605,6 +610,10 @@ def main() -> int:
     if skip_msg:
         print_stage("Update finished with the following messages")
         print(skip_msg.strip())
+
+    if args.use_tests:
+        print()
+        print('NOTE: --use-tests is a deprecated command line argument, kept for compatibility purposes.')
 
     # For failed submodule update we throw an error, since not having correct
     # submodules can make Blender throw errors.
