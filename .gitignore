@@ -68,6 +68,8 @@ waveletNoiseTile.bin
 /release/datafiles/locale/
 /release/scripts/addons_contrib/
 /source/tools/
+/release/datafiles/assets/
+/tests/data/
 
 # Build files for VS and VS Code.
 /build/
