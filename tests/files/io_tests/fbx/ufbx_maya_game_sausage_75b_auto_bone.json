@@ -1,0 +1,7 @@
+{
+  "automatic_bone_orientation": true,
+  "use_manual_orientation": true,
+  "axis_forward": "Z",
+  "axis_up": "X",
+  "global_scale": 8.0
+}
