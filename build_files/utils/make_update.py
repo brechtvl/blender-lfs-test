@@ -5,7 +5,7 @@
 
 """
 "make update" for all platforms, updating Git LFS submodules for libraries and
-tests, and Blender git repository.
+Blender git repository.
 
 For release branches, this will check out the appropriate branches of
 submodules and libraries.
@@ -58,7 +58,6 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument("--no-libraries", action="store_true")
     parser.add_argument("--no-blender", action="store_true")
     parser.add_argument("--no-submodules", action="store_true")
-    parser.add_argument("--use-tests", action="store_true")
     parser.add_argument("--git-command", default="git")
     parser.add_argument("--use-linux-libraries", action="store_true")
     parser.add_argument("--architecture", type=str,
@@ -207,21 +206,6 @@ def initialize_precompiled_libraries(args: argparse.Namespace) -> str:
         return "Skipping libraries update: no configured submodule\n"
 
     print(f"* Enabling precompiled libraries at {submodule_dir}")
-    make_utils.git_enable_submodule(args.git_command, Path(submodule_dir))
-
-    return ""
-
-
-def initialize_tests_data_files(args: argparse.Namespace) -> str:
-    """
-    Configure submodule with files used by regression tests
-    """
-
-    print_stage("Configuring Tests Data Files")
-
-    submodule_dir = "tests/data"
-
-    print(f"* Enabling tests data at {submodule_dir}")
     make_utils.git_enable_submodule(args.git_command, Path(submodule_dir))
 
     return ""
@@ -526,21 +510,6 @@ def floating_checkout_update(
     return skip_msg
 
 
-def floating_libraries_update(args: argparse.Namespace, branch: "str | None") -> str:
-    """Update libraries checkouts which are floating (not attached as Git submodules)"""
-    msg = ""
-
-    msg += floating_checkout_update(
-        args,
-        "benchmarks",
-        Path("tests") / "benchmarks",
-        branch,
-        only_update=True,
-    )
-
-    return msg
-
-
 def add_submodule_push_url(args: argparse.Namespace) -> None:
     """
     Add pushURL configuration for all locally activated submodules, pointing to SSH protocol.
@@ -583,7 +552,6 @@ def submodules_lib_update(args: argparse.Namespace, branch: "str | None") -> str
     print_stage("Updating Libraries")
 
     msg = ""
-    msg += floating_libraries_update(args, branch)
 
     submodule_directories = get_submodule_directories(args)
     for submodule_path in submodule_directories:
@@ -630,8 +598,6 @@ def main() -> int:
 
     if not args.no_libraries:
         libraries_skip_msg += initialize_precompiled_libraries(args)
-        if args.use_tests:
-            libraries_skip_msg += initialize_tests_data_files(args)
         libraries_skip_msg += submodules_lib_update(args, branch)
 
     # Report any skipped repositories at the end, so it's not as easy to miss.
