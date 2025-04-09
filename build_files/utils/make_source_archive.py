@@ -89,7 +89,7 @@ def main() -> None:
 
     if cli_args.package_test_data:
         print("Creating an archive of all test data.")
-        create_manifest(version, manifest, blender_srcdir / "tests/data", packages_dir)
+        create_manifest(version, manifest, blender_srcdir / "tests/files", packages_dir)
     else:
         create_manifest(version, manifest, blender_srcdir, packages_dir)
 
