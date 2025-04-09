@@ -41,7 +41,6 @@ SKIP_NAMES: Tuple[str, ...] = (
 )
 
 SKIP_FOLDERS: Tuple[str, ...] = (
-    "release/datafiles/assets/working",
 )
 
 
